@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Reports
+{% endblock %}
+
+{% block content %}
+
+<div class="report">
+    <li class="report-data">Total Number of Members:
+        {{ members }}</li>
+    <li class="report-data">Total Number of Books:
+        {{ books }}</li>
+</div>
+
+<!-- Chart elements definition -->
+<canvas id="book-line-chart" width="600" height="200"></canvas>
+<canvas id="member-line-chart" width="600" height="200"></canvas>
+
+{% endblock %}
+
+{% block script %}
+
+<script>
+    // Data from backend
+    var book_title = {{ book_title | tojson }};
+    var book_count = {{ book_count | tojson }};
+    var members_name = {{ members_name | tojson }};
+
+    // Books chart
+    new Chart(document.getElementById("book-line-chart"), {
+        type: "bar",
+        data: {
+            labels: book_title,
+            datasets: [
+                {
+                    label: "Top 10 Popular Books",
+                    data: book_count,
+                    backgroundColor: ['rgba(75, 192, 192, 0.2)'],
+                    borderColor: ['rgb(75, 192, 192)'],
+                    borderWidth: 1
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // Members chart
+    new Chart(document.getElementById("member-line-chart"), {
+        type: "bar",
+        data: {
+            labels: members_name,
+            datasets: [
+                {
+                    label: "Top 10 Paying Members",
+                    data: member_paid, // This line is removed
+                    borderWidth: 1,
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+                    borderColor: ['rgb(255, 99, 132)']
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+                    
+{% endblock %}
+
